@@ -22,7 +22,7 @@ This document outlines the steps to set up an OpenTofu state backend in an Azure
    ```
 
 3. **Initialize and Apply the `tfstate-backend` Module**  
-   Navigate to the `tfstate-backend` directory and initialize and apply the OpenTofu configuration:
+   Navigate to the `tfstate-backend` directory. Initialize and apply the OpenTofu configuration to create the storage account that will store the state:
    ```bash
    cd tfstate-backend
    tofu init && tofu apply
@@ -94,8 +94,8 @@ This part describes how to configure an OpenTofu module to use the remote Azure 
    tofu apply
    ```
 
-4. **Destroy the Configuration**  
-   Destroy the OpenTofu configuration to clean up:
+4. **Destroy the Sample Resources**  
+   Destroy the resources to clean up:
    ```bash
    tofu destroy
    ```
