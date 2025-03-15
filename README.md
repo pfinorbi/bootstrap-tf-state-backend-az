@@ -1,11 +1,11 @@
-# Steps to Bootstrap OpenTofu Remote State Backend in Azure Blob Storage
+# Bootstrap OpenTofu Remote State in Azure Blob
 
-This document outlines the steps to set up a OpenTofu state backend in Azure using the provided templates.
+This document outlines the steps to set up an OpenTofu state backend in an Azure blob container using OpenTofu IaC templates.
 
 ## Prerequisites
 
 - Ensure you have the Azure CLI (`az`) installed on your system.
-- Ensure you have OpenTofu (`tofu`) installed on your system
+- Ensure you have OpenTofu (`tofu`) installed on your system.
 
 ## Steps
 
@@ -16,13 +16,13 @@ This document outlines the steps to set up a OpenTofu state backend in Azure usi
    ```
 
 2. **Set the Subscription ID for OpenTofu**  
-   Export the subscription ID as an environment variable for OpenTofu:
+   Export the subscription ID as an environment variable:
    ```bash
    export TF_VAR_subscription_id=$(az account show --query id --output tsv | tr -d "\r")
    ```
 
 3. **Initialize and Apply the `tfstate-backend` Module**  
-   Navigate to the `tfstate-backend` directory and initialize and apply the Terraform configuration:
+   Navigate to the `tfstate-backend` directory and initialize and apply the OpenTofu configuration:
    ```bash
    cd tfstate-backend
    tofu init && tofu apply
@@ -35,23 +35,23 @@ This document outlines the steps to set up a OpenTofu state backend in Azure usi
    ```
 
 5. **Delete Local State Files**  
-   Remove the local OpenTofu state files to ensure the state is fully managed remotely:
+   Remove the local state files:
    ```bash
    rm terraform.tfstate terraform.tfstate.backup
    ```
 
 6. **Test the Backend Configuration**  
-   Verify that the backend is correctly configured by running a Terraform plan:
+   Verify that the backend is correctly configured by running an OpenTofu plan:
    ```bash
    tofu plan
    ```
 
 7. **Store Outputs for Later Use (Optional)**  
-   Export the outputs from the OpenTofu configuration as environment variables:
+   Export the outputs from the OpenTofu configuration as variables:
    ```bash
-   export resource_group_name=$(tofu output -raw resource_group_name)
-   export storage_account_name=$(tofu output -raw storage_account_name)
-   export container_name=$(tofu output -raw container_name)
+   resource_group_name=$(tofu output -raw resource_group_name)
+   storage_account_name=$(tofu output -raw storage_account_name)
+   container_name=$(tofu output -raw container_name)
    ```
 
 8. **Return to the Root Directory**  
@@ -60,10 +60,12 @@ This document outlines the steps to set up a OpenTofu state backend in Azure usi
    cd ..
    ```
 
-## Configure a Sample Root Module with Remote Backend
+## Configure a Sample OpenTofu Module with Remote Backend (Optional)
+
+This part describes how to configure an OpenTofu module to use the remote Azure blob backend created in the previous steps.
 
 1. **Add Remote Backend Configuration**  
-   Navigate to the `sample` directory and create a `backend.tf` using the following commands:
+   Navigate to the `sample` directory and create the backend configuration file using the following commands:
    ```bash
    cd sample
 
@@ -81,19 +83,19 @@ This document outlines the steps to set up a OpenTofu state backend in Azure usi
    ```
 
 2. **Run Initialization to Configure the Backend**  
-   Initialize the Terraform backend:
+   Initialize the OpenTofu backend:
    ```bash
    tofu init
    ```
 
-3. **Test the Backend Configuration**  
-   Verify the backend configuration by running a Terraform plan:
-   ```bash
-   tofu plan
-   ```
-
-4. **Apply the Configuration**  
-   Apply the Terraform configuration:
+3. **Apply the Configuration**  
+   Apply the OpenTofu configuration:
    ```bash
    tofu apply
+   ```
+
+4. **Destroy the Configuration**  
+   Destroy the OpenTofu configuration to clean up:
+   ```bash
+   tofu destroy
    ```
